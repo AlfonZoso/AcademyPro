@@ -3,6 +3,8 @@ from tkinter import messagebox
 import db
 import dashboard
 
+db.inicializar_bd()
+
 def login():
     usuario = entry_usuario.get()
     contraseña = entry_contraseña.get()
