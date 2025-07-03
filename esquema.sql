@@ -17,9 +17,13 @@ CREATE TABLE IF NOT EXISTS academias (
 CREATE TABLE IF NOT EXISTS alumnos (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
+    apellidos VARCHAR(100) NOT NULL,
+    dni VARCHAR(20) NOT NULL UNIQUE,
+    telefono VARCHAR(20),
     email VARCHAR(100),
-    fecha_fin DATE NOT NULL,
+    ref_curso VARCHAR(100),
+    nombre_curso VARCHAR(100),
+    fecha_fin_curso DATE NOT NULL,
     academia_id INT,
     FOREIGN KEY (academia_id) REFERENCES academias(id)
 );
-s

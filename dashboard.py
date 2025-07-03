@@ -13,7 +13,7 @@ def mostrar_dashboard():
         return cursor.fetchall()
 
     def cargar_alumnos(academia_id):
-        cursor.execute("SELECT nombre, email, fecha_fin FROM alumnos WHERE academia_id = %s", (academia_id,))
+        cursor.execute("SELECT nombre, email, fecha_fin_curso FROM alumnos WHERE academia_id = %s", (academia_id,))
         return cursor.fetchall()
 
     def registrar_academia():
@@ -26,6 +26,7 @@ def mostrar_dashboard():
         cargar_lista_academias()
 
     def registrar_alumno():
+        global academias
         nombre = entry_nombre_alumno.get()
         email = entry_email.get()
         fecha_fin = entry_fecha_fin.get()
@@ -34,16 +35,18 @@ def mostrar_dashboard():
             messagebox.showwarning("Academia", "Selecciona una academia")
             return
         academia_id = academias[idx][0]
-        cursor.execute("INSERT INTO alumnos (nombre, email, fecha_fin, academia_id) VALUES (%s, %s, %s, %s)",
+        cursor.execute("INSERT INTO alumnos (nombre, email, fecha_fin_curso, academia_id) VALUES (%s, %s, %s, %s)",
                     (nombre, email, fecha_fin, academia_id))
         conn.commit()
         mostrar_alumnos()
 
     def cargar_lista_academias():
+        global academias
         academias = obtener_academias()
         combo_academias['values'] = [a[1] for a in academias]
 
     def mostrar_alumnos(*args):
+        global academias
         lista_alumnos.delete(*lista_alumnos.get_children())
         idx = combo_academias.current()
         if idx >= 0:
@@ -54,7 +57,7 @@ def mostrar_dashboard():
     def mostrar_seguimiento():
         meses = int(combo_meses.get())
         fecha_limite = date.today() - timedelta(days=meses*30)
-        cursor.execute("SELECT nombre FROM alumnos WHERE fecha_fin <= %s", (fecha_limite,))
+        cursor.execute("SELECT nombre FROM alumnos WHERE fecha_fin_curso <= %s", (fecha_limite,))
         resultados = cursor.fetchall()
         if resultados:
             nombres = "\n".join(r[0] for r in resultados)
